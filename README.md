@@ -1,6 +1,6 @@
 # µPort DID Resolver
 
-This library is intended to resolve µPort DID documents.
+This library is intended to resolve µPort DID documents. µPort is a thin identity protocol that uses ipfs and ethereum to publish and rotate the cryptographic keys used by an identity. Currently it only supports creating and resolving identities, but not updating them.
 
 It supports the proposed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/) spec from the [W3C Credentials Community Group](https://w3c-ccg.github.io).
 
@@ -16,9 +16,9 @@ import registerResolver from 'muport-did-resolver'
 
 registerResolver()
 
-resolve('did:muport:2nQtiQG6Cgm1GYTBaaKAgr76uY7iSexUkqX/some/path#fragment=123').then(doc => console.log)
+resolve('did:muport:QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmPW').then(doc => console.log)
 
 // You can also use ES7 async/await syntax
-const doc = await resolve('did:muport:2nQtiQG6Cgm1GYTBaaKAgr76uY7iSexUkqX/some/path#fragment=123')
+const doc = await resolve('did:muport:QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmPW')
 ```
 

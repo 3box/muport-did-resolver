@@ -1,8 +1,9 @@
 import resolve from 'did-resolver'
 import IPFS from 'ipfs-mini';
+// TODO - use a real µPort did here
 const docPerson = {
   '@context': 'https://w3id.org/did/v1',
-  'id': 'did:muport:2nQtiQG6Cgm1GYTBaaKAgr76uY7iSexUkqX',
+  'id': 'did:muport:QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmPW',
   'publicKey': [{
     'id': 'did:muport:2nQtiQG6Cgm1GYTBaaKAgr76uY7iSexUkqX#keys-1',
     'type': 'EcdsaPublicKeySecp256k1',
