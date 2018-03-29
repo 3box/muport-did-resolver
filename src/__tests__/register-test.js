@@ -51,7 +51,7 @@ describe('µPortResolver', () => {
     describe('error handling', () => {
       it('rejects promise', async () => {
         register()
-        await expect(resolve('did:muport:tmaZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmxs')).rejects.toEqual('Invalid muport did')
+        await expect(resolve('did:muport:tmaZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmxs')).rejects.toThrow('Invalid muport did')
       })
     })
   })

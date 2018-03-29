@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",
+    "bluebird": "^3.5.1",
     "did-resolver": "^0.0.4",
     "ipfs-mini": "^1.1.2"
   },
