@@ -1,24 +1,35 @@
 import resolve from 'did-resolver'
 import IPFS from 'ipfs-mini';
 // TODO - use a real µPort did here
-const docPerson = {
-  '@context': 'https://w3id.org/did/v1',
-  'id': 'did:muport:QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmPW',
-  'publicKey': [{
-    'id': 'did:muport:2nQtiQG6Cgm1GYTBaaKAgr76uY7iSexUkqX#keys-1',
-    'type': 'EcdsaPublicKeySecp256k1',
-    'owner': 'did:muport:2nQtiQG6Cgm1GYTBaaKAgr76uY7iSexUkqX',
-    'publicKeyHex': '04613bb3a4874d27032618f020614c21cbe4c4e4781687525f6674089f9bd3d6c7f6eb13569053d31715a3ba32e0b791b97922af6387f087d6b5548c06944ab062'
+const muportDoc = {"version":1,"signingKey":"02756bca1edf0d0e263851b95e7963b4721d82c2e84c9d7f8a380f899dff8f721c","managementKey":"0214ca1c21dfa6bb2550a8559e83817ebd82cfbb8dbda56757f4c0517dde9c52ff","asymEncryptionKey":"uYGr6nD/c/2hQ3hNFrWUWAdlNoelPqduYyyafrALf2U=","publicProfile":{"name":"lala"},"symEncryptedData":{}}
+const didDoc = {
+  "@context": "https://w3id.org/did/v1",
+  "authentication": [{
+    "publicKey": "did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV#keys-1",
+    "type": "Secp256k1SignatureAuthentication2018"
+  }],
+  "id": "did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV",
+  "muportData": {"nym": "lala", "symEncryptedData": {}},
+  "publicKey": [{
+    "id": "did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV#keys-1",
+    "owner": "did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV",
+    "publicKeyHex": "02756bca1edf0d0e263851b95e7963b4721d82c2e84c9d7f8a380f899dff8f721c",
+    "type": "Secp256k1VerificationKey2018"
   }, {
-    'id': 'did:muport:2nQtiQG6Cgm1GYTBaaKAgr76uY7iSexUkqX#keys-2',
-    'type': 'Curve25519EncryptionPublicKey',
-    'owner': 'did:muport:2nQtiQG6Cgm1GYTBaaKAgr76uY7iSexUkqX',
-    'publicKeyBase64': 'QCFPBLm5pwmuTOu+haxv0+Vpmr6Rrz/DEEvbcjktQnQ='
+    "id": "did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV#keys-2",
+    "owner": "did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV",
+    "publicKeyBase64": "0214ca1c21dfa6bb2550a8559e83817ebd82cfbb8dbda56757f4c0517dde9c52ff",
+    "type": "Secp256k1ManagementKey2018"
+  }, {
+    "id": "did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV#keys-3",
+    "owner": "did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV",
+    "publicKeyBase64": "uYGr6nD/c/2hQ3hNFrWUWAdlNoelPqduYyyafrALf2U=",
+    "type": "Curve25519EncryptionPublicKey"
   }]
 }
 IPFS.prototype.catJSON = (hash, cb) => {
-  if (hash === 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmPW') {
-    cb(null, docPerson)
+  if (hash === 'QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV') {
+    cb(null, muportDoc)
   } else {
     cb('Error: blablabla')
   }
@@ -33,7 +44,7 @@ describe('µPortResolver', () => {
     describe('valid DID docs', async () => {
       it('resolves document', async () => {
         register()
-        await expect(resolve('did:muport:QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmPW')).resolves.toEqual(docPerson)
+        await expect(resolve('did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV')).resolves.toEqual(didDoc)
       })
     })
 
