@@ -23,24 +23,24 @@ function wrapDocument (did, muportDocument) {
     "@context": "https://w3id.org/did/v1",
     "id": did,
     "publicKey": [{
-      "id": did + "#keys-1",
+      "id": did + "#signingKey",
       "type": "Secp256k1VerificationKey2018",
       "owner": did,
       "publicKeyHex": muportDocument.signingKey
     }, {
-      "id": did + "#keys-2",
-      "type": "Secp256k1ManagementKey2018",
+      "id": did + "#managementKey",
+      "type": "Secp256k1VerificationKey2018",
       "owner": did,
-      "publicKeyBase64": muportDocument.managementKey
+      "publicKeyHex": muportDocument.managementKey
     }, {
-      "id": did + "#keys-3",
+      "id": did + "#encryptionKey",
       "type": "Curve25519EncryptionPublicKey",
       "owner": did,
       "publicKeyBase64": muportDocument.asymEncryptionKey
     }],
     "authentication": [{
       "type": "Secp256k1SignatureAuthentication2018",
-      "publicKey": did + "#keys-1"
+      "publicKey": did + "#signingKey"
     }],
     "muportData": {
       "nym": muportDocument.publicProfile.name
