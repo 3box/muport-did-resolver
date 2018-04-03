@@ -1,20 +1,31 @@
 import { registerMethod } from 'did-resolver'
 import IPFS from 'ipfs-mini'
+import { promisifyAll } from 'bluebird'
+import ethLookup from './eth-lookup'
 
-function register (ipfsConf) {
-  const conf = ipfsConf || { host: 'ipfs.infura.io', port: 5001, protocol: 'https' }
-  const ipfs = new IPFS(conf)
+
+function register (opts = {}) {
+  const conf = opts.ipfsConf || { host: 'ipfs.infura.io', port: 5001, protocol: 'https' }
+  const ipfs = promisifyAll(new IPFS(conf))
 
   async function resolve (did, parsed) {
-    // since we don't support UPDATE operation yet we only fetch the document from ipfs
-    return new Promise((resolve, reject) => {
-      ipfs.catJSON(parsed.id, (err, doc) => {
-        if (err || !doc.signingKey) reject('Invalid muport did')
-        resolve(wrapDocument(did, doc))
-      })
-    })
+    let doc = await fetchMuPortDoc(ipfs, parsed.id)
+    const newHash = await ethLookup(doc.managementKey, opts.rpcProviderUrl)
+    if (newHash) {
+      doc = await fetchMuPortDoc(ipfs, newHash)
+    }
+    return wrapDocument(did, doc)
   }
   registerMethod('muport', resolve)
+}
+
+async function fetchMuPortDoc (ipfs, ipfsHash) {
+  let doc
+  try {
+    doc = await ipfs.catJSONAsync(ipfsHash)
+  } catch (e) {}
+  if (!doc || !doc.signingKey) throw new Error('Invalid muport did')
+  return doc
 }
 
 function wrapDocument (did, muportDocument) {
