@@ -13,7 +13,7 @@
     "src"
   ],
   "author": "Pelle Braendgaard <pelle.braendgaard@consensys.net>",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "scripts": {
     "test": "jest --runInBand",
     "build:es5": "./node_modules/.bin/babel src -d lib",
