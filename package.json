@@ -1,6 +1,6 @@
 {
   "name": "muport-did-resolver",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Resolve µPort DID documents",
   "main": "lib/register.js",
   "repository": {
@@ -46,6 +46,9 @@
     "ethereumjs-util": "^5.2.0",
     "ipfs-mini": "^1.1.2",
     "xmlhttprequest": "^1.8.0"
+  },
+  "browser": {
+    "xmlhttprequest": false
   },
   "standard": {
     "ignore": [
