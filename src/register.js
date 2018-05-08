@@ -53,10 +53,9 @@ function wrapDocument (did, muportDocument) {
       "type": "Secp256k1SignatureAuthentication2018",
       "publicKey": did + "#signingKey"
     }],
-    "muportData": {
-      "nym": muportDocument.publicProfile.name
-    }
+    "muportData": {}
   }
+  if (muportDocument.publicProfile) doc.muportData.publicProfile = muportDocument.publicProfile
   if (muportDocument.symEncryptedData) doc.muportData.symEncryptedData = muportDocument.symEncryptedData
   if (muportDocument.recoveryNetwork) doc.muportData.recoveryNetwork = muportDocument.recoveryNetwork
   return doc
