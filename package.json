@@ -1,6 +1,6 @@
 {
   "name": "muport-did-resolver",
-  "version": "0.0.7-beta-12",
+  "version": "0.0.7-beta-13",
   "description": "Resolve µPort DID documents",
   "main": "lib/register.js",
   "repository": {

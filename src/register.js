@@ -59,7 +59,7 @@ function wrapDocument (did, muportDocument) {
   } else {
     doc.publicKey[1].publicKeyHex = muportDocument.managementKey
   }
-  if (muportDocument.publicProfile) doc.muportData.publicProfile = muportDocument.publicProfile
+  if (muportDocument.publicProfile) doc.uportProfile = muportDocument.publicProfile
   if (muportDocument.symEncryptedData) doc.muportData.symEncryptedData = muportDocument.symEncryptedData
   if (muportDocument.recoveryNetwork) doc.muportData.recoveryNetwork = muportDocument.recoveryNetwork
   return doc
