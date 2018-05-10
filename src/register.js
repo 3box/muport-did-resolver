@@ -42,7 +42,6 @@ function wrapDocument (did, muportDocument) {
       "id": did + "#managementKey",
       "type": "Secp256k1VerificationKey2018",
       "owner": did,
-      "publicKeyHex": muportDocument.managementKey
     }, {
       "id": did + "#encryptionKey",
       "type": "Curve25519EncryptionPublicKey",
@@ -53,10 +52,14 @@ function wrapDocument (did, muportDocument) {
       "type": "Secp256k1SignatureAuthentication2018",
       "publicKey": did + "#signingKey"
     }],
-    "muportData": {
-      "nym": muportDocument.publicProfile.name
-    }
+    "muportData": {}
   }
+  if (muportDocument.managementKey.length === 42) {
+    doc.publicKey[1].ethereumAddress = muportDocument.managementKey
+  } else {
+    doc.publicKey[1].publicKeyHex = muportDocument.managementKey
+  }
+  if (muportDocument.publicProfile) doc.uportProfile = muportDocument.publicProfile
   if (muportDocument.symEncryptedData) doc.muportData.symEncryptedData = muportDocument.symEncryptedData
   if (muportDocument.recoveryNetwork) doc.muportData.recoveryNetwork = muportDocument.recoveryNetwork
   return doc

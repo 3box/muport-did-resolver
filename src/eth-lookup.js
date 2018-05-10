@@ -9,7 +9,7 @@ const ZERO_HASH = '0x00000000000000000000000000000000000000000000000000000000000
 
 async function ethLookup (managementKey, rpcUrl = PROVIDER_URL) {
   const registryAddress = applications.RevokeAndPublish.networks[1].address
-  const address = EthUtils.pubToAddress(Buffer.from(managementKey, 'hex'), true).toString('hex')
+  const address = managementKey.length === 42 ? managementKey.slice(2) : EthUtils.pubToAddress(Buffer.from(managementKey, 'hex'), true).toString('hex')
   const callData = createCallData(address)
   const hexHash = await rpcRequest(rpcUrl, registryAddress, callData)
   return hexHash === ZERO_HASH ? null : hexToIpfsHash(hexHash)
