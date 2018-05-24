@@ -1,11 +1,10 @@
 const ganache = require('ganache-cli')
 const bs58 = require('bs58')
-const EthereumClaimsRegistryAbi = require('ethereum-claims-registry').registry.abi
 const RevokeAndPublishAbi = require('ethereum-claims-registry').applications.RevokeAndPublish.abi
 const Web3 = require('web3')
 const promisifyAll = require('bluebird').promisifyAll
 
-const ethLookup = require('../eth-lookup.js')
+const { ethLookup } = require('../lookup.js')
 
 const TEST_HASH = 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP1'
 const RPC_PROV_URL = 'http://localhost:8555'
