@@ -1,6 +1,9 @@
-import EthUtils from 'ethereumjs-util'
 import bs58 from 'bs58'
+import { ec as EC } from 'elliptic'
+import { keccak_256 } from 'js-sha3'
+
 const XMLHttpRequest = (typeof window !== 'undefined') ? window.XMLHttpRequest : require('xmlhttprequest').XMLHttpRequest
+const secp256k1 = new EC('secp256k1')
 
 const PROVIDER_URL = 'https://mainnet.infura.io'
 const IPFS_CONF = { host: 'ipfs.infura.io', port: 5001, protocol: 'https' }
@@ -15,7 +18,7 @@ async function ipfsLookup (hash, conf) {
 async function ethLookup (managementKey, rpcUrl = PROVIDER_URL) {
   // registry should always be deployed to this address
   const registryAddress = '0x37c3719cdabd54e6b5195e366f9ef8fc59a509e3'
-  const address = managementKey.length === 42 ? managementKey.slice(2) : EthUtils.pubToAddress(Buffer.from(managementKey, 'hex'), true).toString('hex')
+  const address = managementKey.length === 42 ? managementKey.slice(2) : toEthereumAddress(managementKey)
   const callData = createCallData(address)
   const hexHash = (await request(rpcUrl, JSON.stringify({
       method: 'eth_call',
@@ -53,5 +56,9 @@ function request (url, payload) {
     request.send(payload)
   })
 }
+
+const keccak = data => Buffer.from(keccak_256.buffer(data))
+const decompressPubKey = key => secp256k1.keyFromPublic(key, 'hex').pub.encode('hex')
+const toEthereumAddress = pubkey => keccak(Buffer.from(decompressPubKey(pubkey).slice(2), 'hex')).slice(-20).toString('hex')
 
 module.exports = { ethLookup, ipfsLookup }

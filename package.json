@@ -1,6 +1,6 @@
 {
   "name": "muport-did-resolver",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Resolve µPort DID documents",
   "main": "lib/register.js",
   "repository": {
@@ -43,7 +43,9 @@
   "dependencies": {
     "bs58": "^4.0.1",
     "did-resolver": "^0.0.4",
+    "elliptic": "^6.4.0",
     "ethereumjs-util": "^5.2.0",
+    "js-sha3": "^0.7.0",
     "xmlhttprequest": "^1.8.0"
   },
   "browser": {
