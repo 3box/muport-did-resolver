@@ -50,9 +50,13 @@ function request (url, payload) {
         }
       }
     }
-    request.open(payload ? 'POST' : 'GET', url)
+    if (payload) {
+      request.open('POST', url)
+      request.setRequestHeader('Content-Type', `application/json`)
+    } else {
+      request.open('GET', url)
+    }
     request.setRequestHeader('accept', 'application/json')
-    request.setRequestHeader('Content-Type', `application/json`)
     request.send(payload)
   })
 }
