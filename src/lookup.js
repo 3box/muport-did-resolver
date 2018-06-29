@@ -1,13 +1,18 @@
 import bs58 from 'bs58'
 import { ec as EC } from 'elliptic'
 import { keccak_256 } from 'js-sha3'
+import EthrDIDRegistry from 'ethr-did-registry'
+import HttpProvider from 'ethjs-provider-http'
+import Eth from 'ethjs-query'
+import abi from 'ethjs-abi'
 
 const XMLHttpRequest = (typeof window !== 'undefined') ? window.XMLHttpRequest : require('xmlhttprequest').XMLHttpRequest
 const secp256k1 = new EC('secp256k1')
 
 const PROVIDER_URL = 'https://mainnet.infura.io'
 const IPFS_CONF = { host: 'ipfs.infura.io', port: 5001, protocol: 'https' }
-const ZERO_HASH = '0x0000000000000000000000000000000000000000000000000000000000000000'
+const ATTRIBUTE_CHANGED_FILTER = '0x18ab6b2ae3d64306c00ce663125f2bd680e441a098de1635bd7ad8b0d44965e4'
+const CLAIM_KEY = '0x' + Buffer.from('muPortDocumentIPFS1220', 'utf8').toString('hex') + '00'.repeat(10)
 
 async function ipfsLookup (hash, conf) {
   conf = conf || IPFS_CONF
@@ -15,19 +20,17 @@ async function ipfsLookup (hash, conf) {
   return request(url)
 }
 
-async function ethLookup (managementKey, rpcUrl = PROVIDER_URL) {
-  // registry should always be deployed to this address
-  const registryAddress = '0x37c3719cdabd54e6b5195e366f9ef8fc59a509e3'
-  const address = managementKey.length === 42 ? managementKey.slice(2) : toEthereumAddress(managementKey)
-  const callData = createCallData(address)
-  const hexHash = (await request(rpcUrl, JSON.stringify({
-      method: 'eth_call',
-      params: [ {to: registryAddress, data: callData}, 'latest' ],
-      id: 1,
-      jsonrpc: '2.0'
-    })
-  )).result
-  return hexHash === ZERO_HASH ? null : hexToIpfsHash(hexHash)
+async function ethrLookup (managementKey, rpcUrl = PROVIDER_URL) {
+  const eth = new Eth(new HttpProvider(rpcUrl))
+  const logDecoder = abi.logDecoder(EthrDIDRegistry.abi, false)
+  const address = managementKey.length === 42 ? managementKey.slice(2).toLowerCase() : toEthereumAddress(managementKey)
+  const logs = logDecoder(await eth.getLogs({
+    address: EthrDIDRegistry.address,
+    topics: [ATTRIBUTE_CHANGED_FILTER, '0x000000000000000000000000' + address],
+    fromBlock: 0,
+    toBlock: 'latest'
+  })).filter(event => event.name === CLAIM_KEY)
+  return logs.length === 0 ? null : hexToIpfsHash(logs.pop().value)
 }
 
 const hexToIpfsHash = hexHash => bs58.encode(Buffer.from('1220' + hexHash.slice(2), 'hex'))
@@ -65,4 +68,4 @@ const keccak = data => Buffer.from(keccak_256.buffer(data))
 const decompressPubKey = key => secp256k1.keyFromPublic(key, 'hex').pub.encode('hex')
 const toEthereumAddress = pubkey => keccak(Buffer.from(decompressPubKey(pubkey).slice(2), 'hex')).slice(-20).toString('hex')
 
-module.exports = { ethLookup, ipfsLookup }
+module.exports = { ethrLookup, ipfsLookup }
