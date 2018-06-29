@@ -1,6 +1,6 @@
 {
   "name": "muport-did-resolver",
-  "version": "0.1.3",
+  "version": "0.2.0-beta-1",
   "description": "Resolve µPort DID documents",
   "main": "lib/register.js",
   "repository": {
@@ -17,8 +17,8 @@
   "scripts": {
     "test": "jest --runInBand",
     "build:es5": "./node_modules/.bin/babel src -d lib",
-    "build": "yarn build:es5 && yarn test",
-    "prepublish": "npm run build"
+    "build": "yarn build:es5",
+    "prepublish": "npm run build && yarn test"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
@@ -37,7 +37,7 @@
     "regenerator-runtime": "^0.11.1",
     "sinon": "^4.0.1",
     "standard": "^11.0.0",
-    "web3": "0.20.6"
+    "web3": "^1.0.0-beta.34"
   },
   "dependencies": {
     "bs58": "^4.0.1",

@@ -9,7 +9,8 @@ const { ethLookup, ethrLookup } = require('../lookup.js')
 const TEST_HASH_1 = 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP1'
 const TEST_HASH_2 = 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP2'
 const RPC_PROV_URL = 'http://localhost:8555'
-const CLAIM_KEY = 'muPortDocumentIPFS1220'
+const CLAIM_KEY = '0x' + Buffer.from('muPortDocumentIPFS1220', 'utf8').toString('hex')
+const WRONG_KEY = '0x' + Buffer.from('wrongKey', 'utf8').toString('hex')
 const KP = {
   secret: '0x9319b830b14712bd4ab7ede3cef7bfe7f752c5ed8cf66d099a5a14e895c6dceb',
   public: '0291888f1c8cff90aea41cf97dc9b015f2185983524a5e6df888401565239d4d8a',
@@ -29,10 +30,8 @@ describe('MuPort', () => {
     server = promisifyAll(ganache.server( {accounts: [{ secretKey: KP.secret, balance: '0x9999999999999999999999999' }]}))
     await server.listenAsync(8555)
     web3 = new Web3(server.provider)
-    web3.eth = promisifyAll(web3.eth)
     await deploy(deployData.EthereumDIDRegistry)
-    const EthrDIDRegistry = web3.eth.contract(EthrDIDRegistryAbi)
-    ethrRegistry = promisifyAll(EthrDIDRegistry.at(deployData.EthereumDIDRegistry.contractAddress))
+    ethrRegistry = new web3.eth.Contract(EthrDIDRegistryAbi, deployData.EthereumDIDRegistry.contractAddress)
   })
 
   it('should return null if no updates', async () => {
@@ -44,14 +43,14 @@ describe('MuPort', () => {
 
   it('should return null if events are published with the wrong key', async () => {
     const encHash = encodeIpfsHash(TEST_HASH_1)
-    await ethrRegistry.setAttributeAsync(KP.address, 'wrongKey', encHash, 0, {from: KP.address})
+    await ethrRegistry.methods.setAttribute(KP.address, WRONG_KEY, encHash, 0).send({from: KP.address})
     const hash = await ethrLookup(KP.public, RPC_PROV_URL)
     expect(hash).toEqual(null)
   })
 
   it('should return an ipfs hash from ethr-did-registry correctly', async () => {
     const encHash = encodeIpfsHash(TEST_HASH_1)
-    await ethrRegistry.setAttributeAsync(KP.address, CLAIM_KEY, encHash, 0, {from: KP.address})
+    await ethrRegistry.methods.setAttribute(KP.address, CLAIM_KEY, encHash, 0).send({from: KP.address})
     let hash = await ethrLookup(KP.public, RPC_PROV_URL)
     expect(hash).toEqual(TEST_HASH_1)
     hash = await ethrLookup(KP.address, RPC_PROV_URL)
@@ -60,7 +59,7 @@ describe('MuPort', () => {
 
   it('should return an new ipfs hash when updated', async () => {
     const encHash = encodeIpfsHash(TEST_HASH_2)
-    await ethrRegistry.setAttributeAsync(KP.address, CLAIM_KEY, encHash, 0, {from: KP.address})
+    await ethrRegistry.methods.setAttribute(KP.address, CLAIM_KEY, encHash, 0).send({from: KP.address})
     let hash = await ethrLookup(KP.public, RPC_PROV_URL)
     expect(hash).toEqual(TEST_HASH_2)
     hash = await ethrLookup(KP.address, RPC_PROV_URL)
@@ -72,9 +71,8 @@ describe('MuPort', () => {
   })
 
   const deploy = async deployData => {
-    await web3.eth.sendTransactionAsync({from: KP.address, to: deployData.senderAddress, value: web3.toWei(deployData.costInEther, 'ether')})
-    let txHash = await web3.eth.sendRawTransactionAsync(deployData.rawTx)
-    let receipt = await web3.eth.getTransactionReceiptAsync(txHash)
+    await web3.eth.sendTransaction({from: KP.address, to: deployData.senderAddress, value: web3.utils.toWei(deployData.costInEther, 'ether')})
+    await web3.eth.sendSignedTransaction(deployData.rawTx)
   }
 })
 
