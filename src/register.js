@@ -1,12 +1,12 @@
 import { registerMethod } from 'did-resolver'
-import { ethLookup, ipfsLookup } from './lookup'
+import { ethrLookup, ipfsLookup } from './lookup'
 
 
 function register (opts = {}) {
 
   async function resolve (did, parsed) {
     let doc = await fetchMuPortDoc(parsed.id, opts.ipfsConf)
-    const newHash = await ethLookup(doc.managementKey, opts.rpcProviderUrl)
+    const newHash = await ethrLookup(doc.managementKey, opts.rpcProviderUrl)
     if (newHash) {
       doc = await fetchMuPortDoc(newHash, opts.ipfsConf)
     }
