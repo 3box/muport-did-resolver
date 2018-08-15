@@ -12,6 +12,7 @@ const secp256k1 = new EC('secp256k1')
 const PROVIDER_URL = 'https://mainnet.infura.io'
 const IPFS_CONF = { host: 'ipfs.infura.io', port: 5001, protocol: 'https' }
 const ATTRIBUTE_CHANGED_FILTER = '0x18ab6b2ae3d64306c00ce663125f2bd680e441a098de1635bd7ad8b0d44965e4'
+const ZERO_HEX = '0x0000000000000000000000000000000000000000000000000000000000000000'
 const CLAIM_KEY = '0x' + Buffer.from('muPortDocumentIPFS1220', 'utf8').toString('hex') + '00'.repeat(10)
 
 async function ipfsLookup (hash, conf) {
@@ -24,18 +25,42 @@ async function ethrLookup (managementKey, rpcUrl = PROVIDER_URL) {
   const eth = new Eth(new HttpProvider(rpcUrl))
   const logDecoder = abi.logDecoder(EthrDIDRegistry.abi, false)
   const address = managementKey.length === 42 ? managementKey.slice(2).toLowerCase() : toEthereumAddress(managementKey)
-  const logs = logDecoder(await eth.getLogs({
-    address: EthrDIDRegistry.address,
-    topics: [ATTRIBUTE_CHANGED_FILTER, '0x000000000000000000000000' + address],
-    fromBlock: 0,
-    toBlock: 'latest'
-  })).filter(event => event.name === CLAIM_KEY)
-  return logs.length === 0 ? null : hexToIpfsHash(logs.pop().value)
+  let hexHash
+  let previousChange = await lastChange(address, rpcUrl)
+  while (previousChange) {
+    const event = logDecoder(await eth.getLogs({
+      address: EthrDIDRegistry.networks[1].address,
+      topics: [ATTRIBUTE_CHANGED_FILTER, '0x000000000000000000000000' + address],
+      fromBlock: previousChange,
+      toBlock: previousChange
+    }))[0]
+    previousChange = event.previousChange.isZero() ? null : event.previousChange
+    if (event.name === CLAIM_KEY) {
+      hexHash = event.value
+      break
+    }
+  }
+  return hexHash ? hexToIpfsHash(hexHash) : null
+}
+
+async function lastChange (address, rpcUrl = PROVIDER_URL) {
+  address = '0x' + address
+  const methodAbi = EthrDIDRegistry.abi.filter(x => x.name === "changed")[0]
+  const callData = abi.encodeMethod(methodAbi, [address])
+  const lastChanged = (await request(rpcUrl, JSON.stringify({
+      method: 'eth_call',
+      params: [{
+        to: EthrDIDRegistry.networks[1].address,
+        data: callData
+      }, 'latest' ],
+      id: 1,
+      jsonrpc: '2.0'
+    })
+  )).result
+  return lastChanged !== ZERO_HEX ? lastChanged : null
 }
 
 const hexToIpfsHash = hexHash => bs58.encode(Buffer.from('1220' + hexHash.slice(2), 'hex'))
-// a method call to 'lookup' with the claim key 'muPortDocumentIPFS1220'
-const createCallData = addr => '0x5dd4a65f000000000000000000000000' + addr + '6d75506f7274446f63756d656e74495046533132323000000000000000000000'
 
 function request (url, payload) {
   const request = new XMLHttpRequest()

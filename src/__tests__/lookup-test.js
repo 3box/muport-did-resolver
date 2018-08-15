@@ -8,6 +8,7 @@ const { ethLookup, ethrLookup } = require('../lookup.js')
 
 const TEST_HASH_1 = 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP1'
 const TEST_HASH_2 = 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP2'
+const TEST_HASH_3 = 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP3'
 const RPC_PROV_URL = 'http://localhost:8555'
 const CLAIM_KEY = '0x' + Buffer.from('muPortDocumentIPFS1220', 'utf8').toString('hex')
 const WRONG_KEY = '0x' + Buffer.from('wrongKey', 'utf8').toString('hex')
@@ -60,6 +61,15 @@ describe('MuPort', () => {
   it('should return an new ipfs hash when updated', async () => {
     const encHash = encodeIpfsHash(TEST_HASH_2)
     await ethrRegistry.methods.setAttribute(KP.address, CLAIM_KEY, encHash, 0).send({from: KP.address})
+    let hash = await ethrLookup(KP.public, RPC_PROV_URL)
+    expect(hash).toEqual(TEST_HASH_2)
+    hash = await ethrLookup(KP.address, RPC_PROV_URL)
+    expect(hash).toEqual(TEST_HASH_2)
+  })
+
+  it('should return the old ipfs hash when event published with worng key', async () => {
+    const encHash = encodeIpfsHash(TEST_HASH_3)
+    await ethrRegistry.methods.setAttribute(KP.address, WRONG_KEY, encHash, 0).send({from: KP.address})
     let hash = await ethrLookup(KP.public, RPC_PROV_URL)
     expect(hash).toEqual(TEST_HASH_2)
     hash = await ethrLookup(KP.address, RPC_PROV_URL)
