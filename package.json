@@ -1,6 +1,6 @@
 {
   "name": "muport-did-resolver",
-  "version": "0.1.3",
+  "version": "0.2.0-beta-4",
   "description": "Resolve µPort DID documents",
   "main": "lib/register.js",
   "repository": {
@@ -15,10 +15,10 @@
   "author": "Pelle Braendgaard <pelle.braendgaard@consensys.net>",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --testURL=\"http://localhost\"",
     "build:es5": "./node_modules/.bin/babel src -d lib",
-    "build": "yarn build:es5 && yarn test",
-    "prepublish": "npm run build"
+    "build": "yarn build:es5",
+    "prepublish": "npm run build && yarn test"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
@@ -32,19 +32,21 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "bluebird": "^3.5.1",
-    "ethereum-claims-registry": "^0.0.4",
     "ganache-cli": "^6.1.0",
     "jest": "^22.4.0",
     "regenerator-runtime": "^0.11.1",
     "sinon": "^4.0.1",
     "standard": "^11.0.0",
-    "web3": "0.20.6"
+    "web3": "^1.0.0-beta.34"
   },
   "dependencies": {
     "bs58": "^4.0.1",
     "did-resolver": "^0.0.4",
     "elliptic": "^6.4.0",
-    "ethereumjs-util": "^5.2.0",
+    "ethjs-abi": "^0.2.1",
+    "ethjs-provider-http": "^0.1.6",
+    "ethjs-query": "^0.3.8",
+    "ethr-did-registry": "^0.0.3",
     "js-sha3": "^0.7.0",
     "xmlhttprequest": "^1.8.0"
   },

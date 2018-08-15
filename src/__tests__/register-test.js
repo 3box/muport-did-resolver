@@ -7,7 +7,7 @@ jest.mock('../lookup', () => {
   const muportDoc2 = {"version":1,"signingKey":"027587672345787832457234587973b4721d82c2e84c9d7f8a380f899dff8f721c","managementKey":"098772359877345987733459987873459898772340bda56757f4c0517dde9c52ff","asymEncryptionKey":"uYGr6nD/c/29834589834AdlNoelPqduYyyafrALf2U=","publicProfile":{"name":"blub"},"symEncryptedData":{}}
   let called = false
   return {
-    ethLookup: () => {
+    ethrLookup: () => {
       if (called) {
         return 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP1'
       } else {
