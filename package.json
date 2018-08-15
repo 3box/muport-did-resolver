@@ -1,6 +1,6 @@
 {
   "name": "muport-did-resolver",
-  "version": "0.2.0-beta-2",
+  "version": "0.2.0-beta-4",
   "description": "Resolve µPort DID documents",
   "main": "lib/register.js",
   "repository": {
@@ -15,7 +15,7 @@
   "author": "Pelle Braendgaard <pelle.braendgaard@consensys.net>",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --testURL=\"http://localhost\"",
     "build:es5": "./node_modules/.bin/babel src -d lib",
     "build": "yarn build:es5",
     "prepublish": "npm run build && yarn test"

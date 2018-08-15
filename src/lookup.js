@@ -13,7 +13,7 @@ const PROVIDER_URL = 'https://mainnet.infura.io'
 const IPFS_CONF = { host: 'ipfs.infura.io', port: 5001, protocol: 'https' }
 const ATTRIBUTE_CHANGED_FILTER = '0x18ab6b2ae3d64306c00ce663125f2bd680e441a098de1635bd7ad8b0d44965e4'
 const ZERO_HEX = '0x0000000000000000000000000000000000000000000000000000000000000000'
-const CLAIM_KEY = '0x' + Buffer.from('muPortDocumentIPFS1220', 'utf8').toString('hex') + '00'.repeat(10)
+const CLAIM_KEY = '0x' + Buffer.from('muPortDocument', 'utf8').toString('hex')
 
 async function ipfsLookup (hash, conf) {
   conf = conf || IPFS_CONF
@@ -35,7 +35,7 @@ async function ethrLookup (managementKey, rpcUrl = PROVIDER_URL) {
       toBlock: previousChange
     }))[0]
     previousChange = event.previousChange.isZero() ? null : event.previousChange
-    if (event.name === CLAIM_KEY) {
+    if (event.name.startsWith(CLAIM_KEY)) {
       hexHash = event.value
       break
     }
@@ -60,7 +60,7 @@ async function lastChange (address, rpcUrl = PROVIDER_URL) {
   return lastChanged !== ZERO_HEX ? lastChanged : null
 }
 
-const hexToIpfsHash = hexHash => bs58.encode(Buffer.from('1220' + hexHash.slice(2), 'hex'))
+const hexToIpfsHash = hexHash => bs58.encode(Buffer.from(hexHash.slice(2), 'hex'))
 
 function request (url, payload) {
   const request = new XMLHttpRequest()

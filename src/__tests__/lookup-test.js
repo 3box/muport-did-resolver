@@ -10,7 +10,7 @@ const TEST_HASH_1 = 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP1'
 const TEST_HASH_2 = 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP2'
 const TEST_HASH_3 = 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP3'
 const RPC_PROV_URL = 'http://localhost:8555'
-const CLAIM_KEY = '0x' + Buffer.from('muPortDocumentIPFS1220', 'utf8').toString('hex')
+const CLAIM_KEY = '0x' + Buffer.from('muPortDocument', 'utf8').toString('hex')
 const WRONG_KEY = '0x' + Buffer.from('wrongKey', 'utf8').toString('hex')
 const KP = {
   secret: '0x9319b830b14712bd4ab7ede3cef7bfe7f752c5ed8cf66d099a5a14e895c6dceb',
@@ -87,5 +87,5 @@ describe('MuPort', () => {
 })
 
 const encodeIpfsHash = (hash) => {
-  return '0x' + bs58.decode(hash).toString('hex').slice(4)
+  return '0x' + bs58.decode(hash).toString('hex')
 }
