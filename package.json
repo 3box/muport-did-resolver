@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "bs58": "^4.0.1",
-    "did-resolver": "^0.0.4",
+    "did-resolver": "^0.0.5",
     "elliptic": "^6.4.0",
     "ethjs-abi": "^0.2.1",
     "ethjs-provider-http": "^0.1.6",
