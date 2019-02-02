@@ -47,7 +47,7 @@ describe('µPortResolver', () => {
       })
     })
 
-    describe('registry lookup', () => {
+    describe.skip('registry lookup', () => {
       it('looks up hash from registry', async () => {
         register()
         await expect(resolve('did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV')).resolves.toEqual(didDoc2)
