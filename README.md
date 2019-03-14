@@ -18,7 +18,7 @@ import registerResolver from 'muport-did-resolver'
 
 registerResolver()
 
-resolve('did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV').then(doc => console.log)
+resolve('did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV').then(doc => console.log(doc))
 
 // You can also use ES7 async/await syntax
 const doc = await resolve('did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV')
