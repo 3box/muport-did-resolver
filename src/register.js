@@ -1,31 +1,31 @@
 import { registerMethod } from 'did-resolver'
-import { ipfsLookup } from './lookup'
+//import { ipfsLookup } from './lookup'
 
 
-function register (opts = {}) {
+function register (ipfs, opts = {}) {
 
   async function resolve (did, parsed) {
-    let doc = await fetchMuPortDoc(parsed.id, opts.ipfsConf)
-    //const newHash = await ethrLookup(doc.managementKey, opts.rpcProviderUrl)
-    //if (newHash) {
-      //doc = await fetchMuPortDoc(newHash, opts.ipfsConf)
-    //}
+    let doc = await fetchMuPortDoc(ipfs, parsed.id)
     return wrapDocument(did, doc)
   }
   registerMethod('muport', resolve)
 }
 
-async function fetchMuPortDoc (ipfsHash, ipfsConf) {
+async function fetchMuPortDoc (ipfs, ipfsHash) {
   let doc
   try {
-    doc = await ipfsLookup(ipfsHash, ipfsConf)
+    doc = JSON.parse(await ipfs.files.cat(ipfsHash))
   } catch (e) {}
-  if (!doc || !doc.signingKey) throw new Error('Invalid muport did')
+  if (!doc || doc.version !== 1 || !doc.signingKey || !doc.managementKey || !doc.asymEncryptionKey) {
+    try {
+      ipfs.pin.rm(ipfsHash)
+    } catch (e) {}
+    throw new Error('Invalid muport did')
+  }
   return doc
 }
 
 function wrapDocument (did, muportDocument) {
-  if (muportDocument.version !== 1) throw new Error('Unsupported muportDocument version')
   let doc = {
     "@context": "https://w3id.org/did/v1",
     "id": did,

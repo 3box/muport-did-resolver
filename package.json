@@ -1,6 +1,6 @@
 {
   "name": "muport-did-resolver",
-  "version": "0.3.0-alpha.2",
+  "version": "0.3.0-alpha.3",
   "description": "Resolve µPort DID documents",
   "main": "lib/register.js",
   "repository": {
@@ -40,8 +40,7 @@
     "web3": "^1.0.0-beta.34"
   },
   "dependencies": {
-    "did-resolver": "0.0.6",
-    "xmlhttprequest": "^1.8.0"
+    "did-resolver": "0.0.6"
   },
   "browser": {
     "xmlhttprequest": false
