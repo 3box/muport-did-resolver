@@ -1,5 +1,8 @@
 # Release notes
 
+## v0.3.0
+* feat: support passing ipfs object when resolving document
+
 ## v0.2.0
 Use the ethr-did-registry contract to look up key revocations on ethereum. This is a breaking change.
 
