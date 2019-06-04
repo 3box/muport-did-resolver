@@ -1,6 +1,7 @@
 import { registerMethod } from 'did-resolver'
-//import { ipfsLookup } from './lookup'
+import fetch from 'node-fetch'
 
+const INFURA = 'https://ipfs.infura.io/ipfs/'
 
 function register (ipfs, opts = {}) {
 
@@ -14,15 +15,19 @@ function register (ipfs, opts = {}) {
 async function fetchMuPortDoc (ipfs, ipfsHash) {
   let doc
   try {
-    doc = JSON.parse(await ipfs.files.cat(ipfsHash))
+    doc = ipfs ? JSON.parse(await ipfs.files.cat(ipfsHash)) : await httpFetch(ipfsHash)
   } catch (e) {}
   if (!doc || doc.version !== 1 || !doc.signingKey || !doc.managementKey || !doc.asymEncryptionKey) {
     try {
-      ipfs.pin.rm(ipfsHash)
+      if (ipfs) ipfs.pin.rm(ipfsHash)
     } catch (e) {}
     throw new Error('Invalid muport did')
   }
   return doc
+}
+
+async function httpFetch (cid) {
+  return (await fetch(INFURA + cid)).json()
 }
 
 function wrapDocument (did, muportDocument) {

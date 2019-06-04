@@ -1,6 +1,6 @@
 {
   "name": "muport-did-resolver",
-  "version": "0.3.0-alpha.3",
+  "version": "0.3.0-alpha.5",
   "description": "Resolve µPort DID documents",
   "main": "lib/register.js",
   "repository": {
@@ -12,35 +12,34 @@
     "lib",
     "src"
   ],
-  "author": "Pelle Braendgaard <pelle.braendgaard@consensys.net>",
+  "author": "3Box team",
   "license": "Apache-2.0",
   "scripts": {
     "test": "jest --runInBand --testURL=\"http://localhost\"",
     "build:es5": "./node_modules/.bin/babel src -d lib",
     "build": "yarn build:es5",
-    "prepublish": "npm run build && yarn test"
+    "prepublishOnly": "npm run build && yarn test"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
     "collectCoverage": true
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-jest": "^22.4.0",
-    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.0",
-    "bluebird": "^3.5.1",
-    "ganache-cli": "^6.1.0",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "7.0.0-bridge.0",
     "jest": "^22.4.0",
-    "regenerator-runtime": "^0.11.1",
-    "sinon": "^4.0.1",
-    "standard": "^11.0.0",
-    "web3": "^1.0.0-beta.34"
+    "regenerator-runtime": "^0.11.1"
   },
   "dependencies": {
-    "did-resolver": "0.0.6"
+    "@babel/runtime": "^7.1.2",
+    "did-resolver": "0.0.6",
+    "node-fetch": "^2.6.0"
   },
   "browser": {
     "xmlhttprequest": false
