@@ -15,7 +15,7 @@ function register (ipfs, opts = {}) {
 async function fetchMuPortDoc (ipfs, ipfsHash) {
   let doc
   try {
-    doc = ipfs ? JSON.parse(await ipfs.files.cat(ipfsHash)) : await httpFetch(ipfsHash)
+    doc = ipfs ? JSON.parse(await ipfs.cat(ipfsHash)) : await httpFetch(ipfsHash)
   } catch (e) {}
   if (!doc || doc.version !== 1 || !doc.signingKey || !doc.managementKey || !doc.asymEncryptionKey) {
     try {

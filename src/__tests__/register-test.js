@@ -6,15 +6,13 @@ const muportDoc1 = '{"version":1,"signingKey":"02756bca1edf0d0e263851b95e7963b47
 const muportDoc2 = '{"version":1,"signingKey":"027587672345787832457234587973b4721d82c2e84c9d7f8a380f899dff8f721c","managementKey":"098772359877345987733459987873459898772340bda56757f4c0517dde9c52ff","asymEncryptionKey":"uYGr6nD/c/29834589834AdlNoelPqduYyyafrALf2U=","publicProfile":{"name":"blub"},"symEncryptedData":{}}'
 
 const IPFS_MOCK = {
-  files: {
-    cat: async hash => {
-      if (hash === 'QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV') {
-        return muportDoc1
-      } else if (hash === 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP1') {
-        return muportDoc2
-      } else {
-        throw new Error('Error: blablabla')
-      }
+  cat: async hash => {
+    if (hash === 'QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV') {
+      return muportDoc1
+    } else if (hash === 'QmZZBBKPS2NWc6PMZbUk9zUHCo1SHKzQPPX4ndfwaYzmP1') {
+      return muportDoc2
+    } else {
+      throw new Error('Error: blablabla')
     }
   }
 }
