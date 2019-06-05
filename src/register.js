@@ -1,31 +1,36 @@
 import { registerMethod } from 'did-resolver'
-import { ethrLookup, ipfsLookup } from './lookup'
+import fetch from 'node-fetch'
 
+const INFURA = 'https://ipfs.infura.io/ipfs/'
 
-function register (opts = {}) {
+function register (ipfs, opts = {}) {
 
   async function resolve (did, parsed) {
-    let doc = await fetchMuPortDoc(parsed.id, opts.ipfsConf)
-    const newHash = await ethrLookup(doc.managementKey, opts.rpcProviderUrl)
-    if (newHash) {
-      doc = await fetchMuPortDoc(newHash, opts.ipfsConf)
-    }
+    let doc = await fetchMuPortDoc(ipfs, parsed.id)
     return wrapDocument(did, doc)
   }
   registerMethod('muport', resolve)
 }
 
-async function fetchMuPortDoc (ipfsHash, ipfsConf) {
+async function fetchMuPortDoc (ipfs, ipfsHash) {
   let doc
   try {
-    doc = await ipfsLookup(ipfsHash, ipfsConf)
+    doc = ipfs ? JSON.parse(await ipfs.cat(ipfsHash)) : await httpFetch(ipfsHash)
   } catch (e) {}
-  if (!doc || !doc.signingKey) throw new Error('Invalid muport did')
+  if (!doc || doc.version !== 1 || !doc.signingKey || !doc.managementKey || !doc.asymEncryptionKey) {
+    try {
+      if (ipfs) ipfs.pin.rm(ipfsHash)
+    } catch (e) {}
+    throw new Error('Invalid muport did')
+  }
   return doc
 }
 
+async function httpFetch (cid) {
+  return (await fetch(INFURA + cid)).json()
+}
+
 function wrapDocument (did, muportDocument) {
-  if (muportDocument.version !== 1) throw new Error('Unsupported muportDocument version')
   let doc = {
     "@context": "https://w3id.org/did/v1",
     "id": did,
