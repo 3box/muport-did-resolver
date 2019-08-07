@@ -19,7 +19,7 @@ async function fetchMuPortDoc (ipfs, ipfsHash) {
   } catch (e) {}
   if (!doc || doc.version !== 1 || !doc.signingKey || !doc.managementKey || !doc.asymEncryptionKey) {
     try {
-      if (ipfs) ipfs.pin.rm(ipfsHash)
+      if (ipfs) await ipfs.pin.rm(ipfsHash)
     } catch (e) {}
     throw new Error('Invalid muport did')
   }
