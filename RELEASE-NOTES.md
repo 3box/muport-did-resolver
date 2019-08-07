@@ -1,5 +1,8 @@
 # Release notes
 
+## v0.3.1
+* fix: await pin rm
+
 ## v0.3.0
 * feat: support passing ipfs object when resolving document
 
