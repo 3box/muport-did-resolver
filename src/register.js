@@ -3,13 +3,13 @@ import fetch from 'node-fetch'
 
 const INFURA = 'https://ipfs.infura.io/ipfs/'
 
-function register (ipfs, opts = {}) {
+export async function resolve (did, parsed) {
+  let doc = await fetchMuPortDoc(null, parsed.id)
+  return wrapDocument(did, doc)
+}
 
-  async function resolve (did, parsed) {
-    let doc = await fetchMuPortDoc(ipfs, parsed.id)
-    return wrapDocument(did, doc)
-  }
-  registerMethod('muport', resolve)
+export function getResolver(config) {
+  return { 'muport': resolve }
 }
 
 async function fetchMuPortDoc (ipfs, ipfsHash) {
@@ -65,5 +65,3 @@ function wrapDocument (did, muportDocument) {
   if (muportDocument.recoveryNetwork) doc.muportData.recoveryNetwork = muportDocument.recoveryNetwork
   return doc
 }
-
-module.exports = register
