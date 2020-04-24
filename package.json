@@ -2,7 +2,7 @@
   "name": "muport-did-resolver",
   "version": "1.0.0",
   "description": "Resolve µPort DID documents",
-  "main": "lib/register.js",
+  "main": "lib/resolver.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/uport-project/muport-did-resolver.git"
