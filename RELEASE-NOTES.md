@@ -1,5 +1,8 @@
 # Release notes
 
+## v1.0.1
+* Fix: package entrypoint filename
+
 ## v1.0.0
 * Chore: upgrade `did-resolver` package
 * Feat: update usage interface to `did-resolver` 1.0 method
