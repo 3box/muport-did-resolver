@@ -1,5 +1,9 @@
 # Release notes
 
+## v1.0.0
+* Chore: upgrade `did-resolver` package
+* Feat: update usage interface to `did-resolver` 1.0 method
+
 ## v0.3.1
 * fix: await pin rm
 

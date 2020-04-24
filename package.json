@@ -1,6 +1,6 @@
 {
   "name": "muport-did-resolver",
-  "version": "0.3.1",
+  "version": "1.0.0",
   "description": "Resolve µPort DID documents",
   "main": "lib/register.js",
   "repository": {
@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "did-resolver": "0.0.6",
+    "did-resolver": "^1.1.0",
     "node-fetch": "^2.6.0"
   },
   "browser": {

@@ -1,15 +1,14 @@
-import { registerMethod } from 'did-resolver'
+import { Resolver } from 'did-resolver'
 import fetch from 'node-fetch'
 
 const INFURA = 'https://ipfs.infura.io/ipfs/'
 
-function register (ipfs, opts = {}) {
-
+function getResolver (ipfs) {
   async function resolve (did, parsed) {
     let doc = await fetchMuPortDoc(ipfs, parsed.id)
     return wrapDocument(did, doc)
   }
-  registerMethod('muport', resolve)
+  return { 'muport': resolve }
 }
 
 async function fetchMuPortDoc (ipfs, ipfsHash) {
@@ -66,4 +65,4 @@ function wrapDocument (did, muportDocument) {
   return doc
 }
 
-module.exports = register
+module.exports = { getResolver }

@@ -10,19 +10,23 @@ It requires the `did-resolver` library, which is the primary interface for resol
 
 ## Resolving a DID document
 
-The resolver presents a simple `resolver()` function that returns a ES6 Promise returning the DID document.
+A µPort resolver is created by passing an IPFS instance to the `getResolver()` function. To use the resolver returned, it must be passed to a `did-resolver` instance during instantiation, for example:
 
 ```js
-import resolve from 'did-resolver'
-import registerResolver from 'muport-did-resolver'
+import { Resolver } from 'did-resolver'
+import { getResolver } from 'muport-did-resolver'
 
-registerResolver()
+const muportResolver = getResolver(ipfs)
+const resolver = new Resolver(muportResolver)
 
-resolve('did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV').then(doc => console.log(doc))
+resolver.resolve('did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV').then(doc => console.log)
 
 // You can also use ES7 async/await syntax
-const doc = await resolve('did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV')
+const doc = await resolver.resolve('did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV')
 ```
+
+See the [did-resolver docs](https://github.com/decentralized-identity/did-resolver) for more general usage information on DID resolvers.
+
 Result:
 ```js
 { '@context': 'https://w3id.org/did/v1',
