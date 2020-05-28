@@ -43,9 +43,17 @@ describe('µPortResolver', () => {
       })
     })
 
-    describe.skip('registry lookup', () => {
-      it('looks up hash from registry', async () => {
-        await expect(resolver.resolve('did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV')).resolves.toEqual(didDoc2)
+    describe('valid DID docs new ipfs version', async () => {
+      beforeAll(() => {
+        IPFS_MOCK.cat = async hash => ({
+          next: async () => ({ value: muportDoc1 })
+        })
+        const muportResolver = getResolver(IPFS_MOCK)
+        resolver = new Resolver(muportResolver)
+      })
+
+      it('resolves document', async () => {
+        await expect(resolver.resolve('did:muport:QmRhjfL4HLdB8LovGf1o43NJ8QnbfqmpdnTuBvZTewnuBV')).resolves.toEqual(didDoc1)
       })
     })
   })
