@@ -14,7 +14,10 @@ function getResolver (ipfs) {
 async function fetchMuPortDoc (ipfs, ipfsHash) {
   let doc
   try {
-    doc = ipfs ? JSON.parse(await ipfs.cat(ipfsHash)) : await httpFetch(ipfsHash)
+    // support both ipfs < 0.41 and ipfs >= 0.41
+    const res = await ipfs.cat(ipfsHash)
+    const data = res.next ? (await res.next()).value : res
+    doc = ipfs ? JSON.parse(data) : await httpFetch(ipfsHash)
   } catch (e) {}
   if (!doc || doc.version !== 1 || !doc.signingKey || !doc.managementKey || !doc.asymEncryptionKey) {
     try {
