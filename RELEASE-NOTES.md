@@ -1,5 +1,8 @@
 # Release notes
 
+## v1.0.2
+* chore: support latest ipfs versions
+
 ## v1.0.1
 * Fix: package entrypoint filename
 
