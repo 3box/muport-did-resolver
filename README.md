@@ -50,3 +50,5 @@ Result:
   muportData: { nym: 'lala', symEncryptedData: {} } }
 ```
 
+## Maintainers
+[@oed](https://github.com/oed)
