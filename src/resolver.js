@@ -20,9 +20,9 @@ async function fetchMuPortDoc (ipfs, ipfsHash) {
     doc = ipfs ? JSON.parse(data) : await httpFetch(ipfsHash)
   } catch (e) {}
   if (!doc || doc.version !== 1 || !doc.signingKey || !doc.managementKey || !doc.asymEncryptionKey) {
-    try {
-      if (ipfs) await ipfs.pin.rm(ipfsHash)
-    } catch (e) {}
+    //try {
+      //if (ipfs) await ipfs.pin.rm(ipfsHash)
+    //} catch (e) {}
     throw new Error('Invalid muport did')
   }
   return doc
