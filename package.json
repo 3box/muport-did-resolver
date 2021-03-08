@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "did-resolver": "^1.1.0",
+    "did-resolver": "^3.0.1",
     "node-fetch": "^2.6.0"
   },
   "browser": {
